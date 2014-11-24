@@ -140,6 +140,10 @@ var ButtonHandling = {
     },
     set: function(button, event) {
       var data = gMainDS[button.id];
+      var CallFrameScript = function(aArgument, aCallback) {
+        DoCallFrameScript(data, "onclick", aArgument, aCallback);
+      }
+
       try {
         var lf = new Error();
         eval(data.onclick);
@@ -148,6 +152,10 @@ var ButtonHandling = {
     hotkey: function(aID, aData) {
       var event = {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false};
       var button; // Intentionally left undefined
+      var CallFrameScript = function(aArgument, aCallback) {
+        DoCallFrameScript(aData, "onclick", aArgument, aCallback);
+      }
+
       try {
         var lf = new Error();
         eval(aData.onclick);
@@ -270,6 +278,9 @@ var ButtonHandling = {
     set: function(button, event) {
       var data = gMainDS[button.id];
       var value = (button.getAttribute("checked") == "true");
+      var CallFrameScript = function(aArgument, aCallback) {
+        DoCallFrameScript(data, "setfunction", aArgument, aCallback);
+      }
 
       try {
         var lf = new Error();
@@ -277,13 +288,21 @@ var ButtonHandling = {
       } catch(e) { LogError(e, lf, button.id, "setfuntion"); }
     },
     update: function(button, aData) {
+      var SetValue = function(aValue) {
+        button.setAttribute("checked", aValue);
+      }
+      var CallFrameScript = function(aArgument, aCallback) {
+        DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
+      }
+
       var value;
       try {
         var lf = new Error();
         eval(aData.getfunction);
       } catch(e) { LogError(e, lf, button.id, "getfuntion"); }
 
-      button.setAttribute("checked", value);
+      if (value !== undefined)
+        SetValue(value);
 
       button.setAttribute("prefbar-visualize-unchecked", goPrefBar.GetPref("extensions.prefbar.visualize_unchecked", false));
     },
@@ -291,25 +310,39 @@ var ButtonHandling = {
       var event = {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false};
       var button; // Intentionally left undefined
 
+      var SetValue = function(aValue) {
+        var value = !aValue;
+
+        var CallFrameScript = function(aArgument, aCallback) {
+          DoCallFrameScript(aData, "setfunction", aArgument, aCallback);
+        }
+
+        try {
+          var lf = new Error();
+          eval(aData.setfunction);
+        } catch(e) { LogError(e, lf, aID, "setfuntion"); }
+
+        var msg;
+        if (value)
+          msg = goPrefBar.GetString("prefbarOverlay.properties", "enabled");
+        else
+          msg = goPrefBar.GetString("prefbarOverlay.properties", "disabled");
+        OSDMessage(aData.label + ": " + msg);
+
+        ButtonHandling.update();
+      }
+      var CallFrameScript = function(aArgument, aCallback) {
+        DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
+      }
+
       var value;
       try {
         var lf = new Error();
         eval(aData.getfunction);
       } catch(e) { LogError(e, lf, aID, "getfuntion"); }
-      value = !value;
-      try {
-        var lf = new Error();
-        eval(aData.setfunction);
-      } catch(e) { LogError(e, lf, aID, "setfuntion"); }
 
-      var msg;
-      if (value)
-        msg = goPrefBar.GetString("prefbarOverlay.properties", "enabled");
-      else
-        msg = goPrefBar.GetString("prefbarOverlay.properties", "disabled");
-      OSDMessage(aData.label + ": " + msg);
-
-      ButtonHandling.update();
+      if (value !== undefined)
+        SetValue(value);
     }
   },
 

@@ -41,7 +41,7 @@
 // |  goprefbar.js component (goPrefBar)
 // +-
 
-const prefbarVersion = 20140928;
+const prefbarVersion = 20141124;
 
 var PrefBranch = Components.classes["@mozilla.org/preferences-service;1"]
   .getService(Components.interfaces.nsIPrefBranch2);
@@ -98,6 +98,11 @@ function Init() {
 
   // Prefill web import whitelist
   ImportWhitelistPrefs();
+
+  // Register our "frame script"
+  var globalMM = Components.classes["@mozilla.org/globalmessagemanager;1"]
+    .getService(Components.interfaces.nsIMessageListenerManager);
+  globalMM.loadFrameScript("chrome://prefbar/content/framescript.js", true);
 }
 
 var ProfChangeObserver = {

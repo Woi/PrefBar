@@ -499,37 +499,6 @@ function prefbarSetProxyEnabled(value) {
 }
 
 //
-// Tab dependent checkboxes
-//
-
-// Javascript
-function prefbarSetTabJavascript(value) {
-  prefbarGetDocShell().allowJavascript = value;
-}
-function prefbarGetTabJavascript() {
-  return prefbarGetDocShell().allowJavascript;
-}
-// Images
-function prefbarSetTabImages(value) {
-  prefbarGetDocShell().allowImages = value;
-}
-function prefbarGetTabImages() {
-  return prefbarGetDocShell().allowImages;
-}
-// Plugins
-function prefbarSetTabPlugins(value) {
-  prefbarGetDocShell().allowPlugins = value;
-}
-function prefbarGetTabPlugins() {
-  return prefbarGetDocShell().allowPlugins;
-}
-function prefbarGetDocShell() {
-  var docShell = getBrowser().docShell;
-  docShell.QueryInterface(Components.interfaces.nsIDocShell);
-  return docShell;
-}
-
-//
 // Java checkbox
 //
 

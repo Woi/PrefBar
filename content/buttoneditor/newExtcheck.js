@@ -42,6 +42,7 @@ function setupNew() {
   initMnuLineJump("itemSetfunction");
   initMnuLineJump("itemGetfunction");
   initMnuLineJump("itemInitfunction");
+  initMnuLineJump("itemFramescript");
 }
 
 function setupEdit() {
@@ -52,6 +53,7 @@ function setupEdit() {
   setField(itemId, "setfunction",     "itemSetfunction");
   setField(itemId, "getfunction",   "itemGetfunction");
   setField(itemId, "initfunction", "itemInitfunction");
+  setField(itemId, "framescript",  "itemFramescript");
 
   var itemugroup = document.getElementById("itemUpdateGroup");
   itemugroup.value = gMainDS[itemId].browserbtnupdatefor || "";
@@ -63,6 +65,7 @@ function setupEdit() {
   initMnuLineJump("itemSetfunction");
   initMnuLineJump("itemGetfunction");
   initMnuLineJump("itemInitfunction");
+  initMnuLineJump("itemFramescript");
 }
 
 
@@ -108,6 +111,12 @@ function editItem() {
     gMainDS[itemId].initfunction = initfunction;
   else
     delete(gMainDS[itemId].initfunction);
+  // framescript
+  var framescript = document.getElementById("itemFramescript").value;
+  if (framescript.match(/[^\n\t\r ]/))
+    gMainDS[itemId].framescript = framescript;
+  else
+    delete(gMainDS[itemId].framescript);
 
   hkeditSaveData(itemId);
 }

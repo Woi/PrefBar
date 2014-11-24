@@ -817,3 +817,16 @@ function LogError(e, lf, id, fname) {
   scriptError.init(omsg, osrc, null, olnum, null, 2, null);
   consoleService.logMessage(scriptError);
 }
+
+function DoCallFrameScript(aButton, aCaller, aArgument, aCallback) {
+  if (!aButton.framescript) return false;
+  var browserMM = gBrowser.selectedBrowser.messageManager;
+  return browserMM.sendAsyncMessage("prefbar:call-button-framescript", {
+    code: aButton.framescript,
+    caller: aCaller,
+    argument: aArgument
+  },
+  {
+    callback: aCallback
+  });
+}

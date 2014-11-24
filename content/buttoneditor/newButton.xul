@@ -55,6 +55,7 @@
       <tab label="&button-preftype-common;"/>
       <tab label="&button-preftype-onclick;"/>
       <tab label="&button-preftype-initfunction;"/>
+      <tab label="Framescript"/>
     </tabs>
     <tabpanels id="panel" flex="1">
       <vbox class="tabpanel" id="commontab" flex="1">
@@ -89,6 +90,10 @@
 
       <vbox id="initfunctiontab" flex="1">
         <textbox id="itemInitfunction" multiline="true" wrap="off" style="height: 100%; font-family: -moz-fixed;" flex="1" class="uri-element"/>
+      </vbox>
+
+      <vbox flex="1">
+        <textbox id="itemFramescript" multiline="true" wrap="off" style="height: 100%; font-family: -moz-fixed;" flex="1" class="uri-element"/>
       </vbox>
     </tabpanels>
   </tabbox>
