@@ -435,6 +435,10 @@ function OnLinkClicked(event) {
 
 function OnPageLoaded(event) {
   goPrefBar.dump("OnPageLoaded");
+
+  // HACK!!! This is a workaround for Mozilla bug 1106610
+  DoCallFrameScriptLocked = false;
+
   SetSpecialChecks("page");
 }
 
@@ -447,6 +451,9 @@ function OnTabChanged(event) {
   }
   goPrefBar.dump("OnTabChanged");
   LastTab = curtab;
+
+  // HACK!!! This is a workaround for Mozilla bug 1106610
+  DoCallFrameScriptLocked = false;
 
   SetSpecialChecks("tab");
 }
@@ -818,9 +825,16 @@ function LogError(e, lf, id, fname) {
   consoleService.logMessage(scriptError);
 }
 
+// HACK!!! This is a workaround for Mozilla bug 1106610
+var DoCallFrameScriptLocked = true;
+
 function DoCallFrameScript(aButton, aCaller, aArgument, aCallback) {
   if (!aButton.framescript) return false;
   var browserMM = gBrowser.selectedBrowser.messageManager;
+
+  // HACK!!! This is a workaround for Mozilla bug 1106610
+  if (DoCallFrameScriptLocked) return;
+
   return browserMM.sendAsyncMessage("prefbar:call-button-framescript", {
     code: aButton.framescript,
     caller: aCaller,
