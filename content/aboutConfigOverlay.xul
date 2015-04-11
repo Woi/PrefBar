@@ -42,8 +42,7 @@
 
   <script type="application/x-javascript">
   <![CDATA[
-    var goPrefBar = Components.classes["@prefbar.mozdev.org/goprefbar;1"]
-                              .getService().wrappedJSObject;
+    Components.utils.import("chrome://prefbar/content/goprefbar.jsm");
   ]]>
   </script>
 

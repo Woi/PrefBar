@@ -37,8 +37,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var goPrefBar = Components.classes["@prefbar.mozdev.org/goprefbar;1"]
-                          .getService().wrappedJSObject;
+Components.utils.import("chrome://prefbar/content/goprefbar.jsm");
 
 const gPages = {"check": "newCheck.xul",
                 "button": "newButton.xul",

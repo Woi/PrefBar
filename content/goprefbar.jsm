@@ -37,16 +37,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+var EXPORTED_SYMBOLS = ["goPrefBar"];
 
-/***********************************************************
-class definition
-***********************************************************/
-
-// Raw template for "goPrefBar" object. Here, it's only prepared with a
-// good "Include" function (one, which logs pretty debug messages to console).
-// All the other parts are included from content/prefbar.js
-var objgoprefbar = {
+var goPrefBar = {
   Include: function(asURL, aoContext) {
     var oLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Components.interfaces.mozIJSSubScriptLoader);
@@ -72,28 +65,5 @@ var objgoprefbar = {
   }
 };
 
-//class constructor
-function GoPrefBar() {
-  // Anything, this component does, is to load the global PrefBar stuff
-  // into global context
-  objgoprefbar.Include("chrome://prefbar/content/goprefbar/main.js", objgoprefbar);
-  objgoprefbar.Init();
-  this.wrappedJSObject = objgoprefbar;
-}
-
-// class definition
-GoPrefBar.prototype = {
-  classDescription: "PrefBar Global Object Component",
-  classID:          Components.ID("{830a2ec4-be0d-4592-8397-ff794b476f28}"),
-  contractID:       "@prefbar.mozdev.org/goprefbar;1",
-  QueryInterface:   XPCOMUtils.generateQI([Components.interfaces.nsISupports]),
-};
-
-/***********************************************************
-module initialization
-***********************************************************/
-
-if (XPCOMUtils.generateNSGetFactory)
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory([GoPrefBar]);
-else
-  var NSGetModule = XPCOMUtils.generateNSGetModule([GoPrefBar]);
+goPrefBar.Include("chrome://prefbar/content/goprefbar/main.js", goPrefBar);
+goPrefBar.Init();

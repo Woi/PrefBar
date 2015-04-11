@@ -47,8 +47,7 @@
 
   <script type="application/x-javascript">
   <![CDATA[
-    var goPrefBar = Components.classes["@prefbar.mozdev.org/goprefbar;1"]
-                              .getService().wrappedJSObject;
+    Components.utils.import("chrome://prefbar/content/goprefbar.jsm");
     // We are in global namespace of the browser, so wrap our stuff
     var PrefBarNS = {}; // PrefBar NameSpace
     goPrefBar.Include("chrome://prefbar/content/prefbarOverlay.js", PrefBarNS);

@@ -39,9 +39,7 @@
 
 const nsIProtocolHandler = Components.interfaces.nsIProtocolHandler;
 
-var goPrefBar = Components.classes["@prefbar.mozdev.org/goprefbar;1"]
-                          .getService().wrappedJSObject;
-
+Components.utils.import("chrome://prefbar/content/goprefbar.jsm");
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 function PrefBarProtocol() {

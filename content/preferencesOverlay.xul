@@ -46,8 +46,7 @@
 
   <script>
   <![CDATA[
-    var goPrefBar = Components.classes["@prefbar.mozdev.org/goprefbar;1"]
-                              .getService().wrappedJSObject;
+    Components.utils.import("chrome://prefbar/content/goprefbar.jsm");
 
     function prefbarHelpHandler(aEvent) {
       if (document.documentElement.currentPane.getAttribute("helpTopic") == "prefbar-editbar") {
