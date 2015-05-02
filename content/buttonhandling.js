@@ -141,7 +141,7 @@ var ButtonHandling = {
     set: function(button, event) {
       var data = gMainDS[button.id];
       var CallFrameScript = function(aArgument, aCallback) {
-        DoCallFrameScript(data, "onclick", aArgument, aCallback);
+        return DoCallFrameScript(data, "onclick", aArgument, aCallback);
       }
 
       try {
@@ -153,7 +153,7 @@ var ButtonHandling = {
       var event = {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false};
       var button; // Intentionally left undefined
       var CallFrameScript = function(aArgument, aCallback) {
-        DoCallFrameScript(aData, "onclick", aArgument, aCallback);
+        return DoCallFrameScript(aData, "onclick", aArgument, aCallback);
       }
 
       try {
@@ -279,7 +279,7 @@ var ButtonHandling = {
       var data = gMainDS[button.id];
       var value = (button.getAttribute("checked") == "true");
       var CallFrameScript = function(aArgument, aCallback) {
-        DoCallFrameScript(data, "setfunction", aArgument, aCallback);
+        return DoCallFrameScript(data, "setfunction", aArgument, aCallback);
       }
 
       try {
@@ -292,7 +292,7 @@ var ButtonHandling = {
         button.setAttribute("checked", aValue);
       }
       var CallFrameScript = function(aArgument, aCallback) {
-        DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
+        return DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
       }
 
       var value;
@@ -314,7 +314,7 @@ var ButtonHandling = {
         var value = !aValue;
 
         var CallFrameScript = function(aArgument, aCallback) {
-          DoCallFrameScript(aData, "setfunction", aArgument, aCallback);
+          return DoCallFrameScript(aData, "setfunction", aArgument, aCallback);
         }
 
         try {
@@ -332,7 +332,7 @@ var ButtonHandling = {
         ButtonHandling.update();
       }
       var CallFrameScript = function(aArgument, aCallback) {
-        DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
+        return DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
       }
 
       var value;

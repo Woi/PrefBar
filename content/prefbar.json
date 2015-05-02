@@ -205,7 +205,7 @@
     "browserbtnupdatefor":"tab",
     "setfunction": "CallFrameScript(value);",
     "getfunction": "CallFrameScript(null, SetValue);",
-    "framescript": "switch(caller) {\n  case \"setfunction\":\n    docShell.allowJavascript = argument;\n    break;\n  case \"getfunction\":\n    reply = docShell.allowJavascript;\n    break;\n}"
+    "framescript": "if (docShell) {\n  switch(caller) {\n    case \"setfunction\":\n      docShell.allowJavascript = argument;\n      break;\n    case \"getfunction\":\n      reply = docShell.allowJavascript;\n      break;\n  }\n}"
   },
   "prefbar:button:prefbartabimages":{
     "label":"Images (Tab)",
@@ -213,7 +213,7 @@
     "browserbtnupdatefor":"tab",
     "setfunction": "CallFrameScript(value);",
     "getfunction": "CallFrameScript(null, SetValue);",
-    "framescript": "switch(caller) {\n  case \"setfunction\":\n    docShell.allowImages = argument;\n    break;\n  case \"getfunction\":\n    reply = docShell.allowImages;\n    break;\n}"
+    "framescript": "if (docShell) {\n  switch(caller) {\n    case \"setfunction\":\n      docShell.allowImages = argument;\n      break;\n    case \"getfunction\":\n      reply = docShell.allowImages;\n      break;\n  }\n}"
   },
   "prefbar:button:prefbartabplugins":{
     "label":"Plugins (Tab)",
@@ -221,7 +221,7 @@
     "browserbtnupdatefor":"tab",
     "setfunction": "CallFrameScript(value);",
     "getfunction": "CallFrameScript(null, SetValue);",
-    "framescript": "switch(caller) {\n  case \"setfunction\":\n    docShell.allowPlugins = argument;\n    break;\n  case \"getfunction\":\n    reply = docShell.allowPlugins;\n    break;\n}"
+    "framescript": "if (docShell) {\n  switch(caller) {\n    case \"setfunction\":\n      docShell.allowPlugins = argument;\n      break;\n    case \"getfunction\":\n      reply = docShell.allowPlugins;\n      break;\n  }\n}"
   },
   "prefbar:button:separator1":{
     "type":"separator"
