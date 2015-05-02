@@ -20,10 +20,9 @@
   },
   "prefbar:button:colors":{
     "label":"Colors",
-    "type":"check",
-    "prefstring":"browser.display.use_document_colors",
-    "topref":"value",
-    "frompref":"value"
+    "type": "extcheck",
+    "setfunction": "prefbarSetColors(value);",
+    "getfunction": "value = prefbarGetColors();"
   },
   "prefbar:button:images":{
     "label":"Images",

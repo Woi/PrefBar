@@ -4,7 +4,7 @@
 #
 
 VERSION=6.5.0
-BUILD=20140928
+BUILD=20150502
 
 .PHONY: all patch chrome xpi clean check-tree update-ja webhelp
 all: patch xpi

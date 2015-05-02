@@ -47,6 +47,42 @@
 // +-
 
 //
+// Colors checkbox
+//
+
+// browser.display.document_color_use
+// Override colors with colors set in browser settings:
+// 2 > always
+// 1 > never
+// 0 > only with high-contrast themes (default)
+
+function prefbarSetColors(aValue) {
+  // Starting with Firefox 37 "browser.display.document_color_use" is used
+  if (goPrefBar.InFF("37.0")) {
+    var pref = "browser.display.document_color_use";
+    var lastvaluepref = "extensions.prefbar.btncolorscheck.lastvalue";
+    if (aValue) {
+      var lastvalue = goPrefBar.GetPref(lastvaluepref, 0);
+      if (lastvalue == 2) lastvalue = 0;
+      goPrefBar.SetPref(pref, lastvalue);
+    }
+    else {
+      goPrefBar.SetPref(lastvaluepref, goPrefBar.GetPref(pref, 0));
+      goPrefBar.SetPref(pref, 2);
+    }
+  }
+  else
+    goPrefBar.SetPref("browser.display.use_document_colors", aValue);
+}
+
+function prefbarGetColors() {
+  if (goPrefBar.InFF("37.0"))
+    return (goPrefBar.GetPref("browser.display.document_color_use", 0) != 2);
+  else
+    return (goPrefBar.GetPref("browser.display.use_document_colors"));
+}
+
+//
 // Clear cache button
 //
 
