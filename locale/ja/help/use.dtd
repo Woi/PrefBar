@@ -41,6 +41,9 @@
 <!ENTITY customizing.initfunction.title "Init-function">
 <!ENTITY customizing.initfunction.content "Init-function は JavaScript を入力して使用します。ここで入力されたコードはボタンの初期化時に実行されます。ここでいうボタンの初期化時にはブラウザの起動時だけでなく PrefBar のボタンデータベースへの変更時も含まれます。ですからここに入力されたコードはセッション中に1回だけ実行されるものではない事に気をつけるべきです。">
 
+<!ENTITY customizing.framescript.title "Framescript">
+<!ENTITY customizing.framescript.content "The Framescript is, so far, only needed in very few situations and will be documented more in detail as soon as there is more need for it. In short this is the first step to make PrefBar compatible to Mozilla's attempt to run the content in tabs in separate processes. The &quot;Framescript&quot; is meant to run in this &quot;content-process&quot;. There is only one Framescript, so you have to call it using &quot;CallFrameScript&quot; from the other event-functions. The name of the function, who called, is passed to the &quot;Framescript&quot; via the <b>caller</b> variable. The first argument to the &quot;CallFrameScript&quot; function is forwared to the Framescript via a variable named <b>argument</b>. You may use an array or object to pass more than one value. The second argument to &quot;CallFrameScript&quot; may be a callback function which is called as soon as your Framescript is finished. If you write something to the variable <b>reply</b> in your Framescript, then this value is passed to your callback. To make asynchronous stuff like this work in Get-functions, a function called &quot;SetValue&quot; is available, there. If you don't need to modify anything in the value, you may pass &quot;SetValue&quot; directly as second argument to &quot;CallFrameScript&quot;.">
+
 <!ENTITY customizing.label-value.title "表示名 &amp; 値">
 <!ENTITY customizing.label-value.content "メニューリスト形式のボタンでのみ使用出来ます。Prefstring で指定したブラウザへの設定の値と表示名を入力します。値に &quot;!RESET!&quot; と入れるならその設定はリセット (about:config で [リセット] を選択するのと同じ効果) が得られます。また表示名が入力されていない場合、その項目は無視され表示されません。">
 
