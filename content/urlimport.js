@@ -104,8 +104,8 @@ function doDownload() {
   gDownloader.progressListener = new PersistProgressListener;
 
   //save file to target
-  if (goPrefBar.InSM("2.33") || goPrefBar.InFF("36.0"))
-    // Incompatible change with Firefox 36.0
+  if (goPrefBar.InGecko("36.0"))
+    // Incompatible change with Gecko 36.0
     gDownloader.saveURI(gURL,null,null,null,null,null,gTempfile,null);
   else
     gDownloader.saveURI(gURL,null,null,null,null,gTempfile,null);

@@ -75,17 +75,6 @@
              oncommand="PrefBarNS.TogglePrefBar()"/>
   </commandset>
 
-  <menupopup id="view_toolbars_popup">
-    <menuitem id="viewprefsbar"
-              position="3"
-              checked="true"
-              class="menuitem-iconic"
-              type="checkbox"
-              label="&prefbar-toolbar.label;"
-              command="cmd_prefbar"
-              key="key_prefbar"/>
-  </menupopup>
-
   <toolbox id="navigator-toolbox">
     <toolbar id="prefbar"
              customizable="true"

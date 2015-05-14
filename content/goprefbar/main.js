@@ -197,6 +197,19 @@ function InFF(aLowerVersion, aUpperVersion) {
   const FF_ID = "{ec8030f7-c20a-464f-9b0e-13a3a9e97384}";
   return InApp(FF_ID, aLowerVersion, aUpperVersion);
 }
+function InGecko(aLowerVersion, aUpperVersion) {
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+    .getService(Components.interfaces.nsIXULAppInfo);
+  var comp = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+    .getService(Components.interfaces.nsIVersionComparator);
+
+  if (aLowerVersion && comp.compare(appInfo.platformVersion, aLowerVersion) < 0)
+    return false;
+  if (aUpperVersion && comp.compare(appInfo.platformVersion, aUpperVersion) >= 0)
+    return false;
+
+  return true;
+}
 
 function ChromeExists(chromeurl) {
   var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
