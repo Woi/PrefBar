@@ -57,8 +57,8 @@
 // 0 > only with high-contrast themes (default)
 
 function prefbarSetColors(aValue) {
-  // Starting with Firefox 37 "browser.display.document_color_use" is used
-  if (goPrefBar.InFF("37.0")) {
+  // Starting with Gecko 37 "browser.display.document_color_use" is used
+  if (goPrefBar.InGecko("37.0")) {
     var pref = "browser.display.document_color_use";
     var lastvaluepref = "extensions.prefbar.btncolorscheck.lastvalue";
     if (aValue) {
@@ -76,7 +76,7 @@ function prefbarSetColors(aValue) {
 }
 
 function prefbarGetColors() {
-  if (goPrefBar.InFF("37.0"))
+  if (goPrefBar.InGecko("37.0"))
     return (goPrefBar.GetPref("browser.display.document_color_use", 0) != 2);
   else
     return (goPrefBar.GetPref("browser.display.use_document_colors"));
