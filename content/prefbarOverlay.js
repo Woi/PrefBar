@@ -710,7 +710,7 @@ function GoLink(url, event) {
 }
 
 function TogglePrefBar() {
-  if (goPrefBar.InFF()) {
+  if (!goPrefBar.InSM()) {
     var prefbar = document.getElementById("prefbar");
     prefbar.collapsed = !prefbar.collapsed;
     document.persist("prefbar", "collapsed");
@@ -729,7 +729,7 @@ function OpenPrefs() {
     return;
   }
 
-  if (goPrefBar.InFF()) {
+  if (!goPrefBar.InSM()) {
     var prefWin = wm.getMostRecentWindow("prefbar:preferences");
     if (prefWin)
       prefWin.focus();

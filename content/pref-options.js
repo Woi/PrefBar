@@ -64,7 +64,7 @@ function ManageImportPerms() {
     windowTitle: goPrefBar.GetString("pref-options.properties", "permmgrtitle")
   }
 
-  var permmgr_url = goPrefBar.InFF() ?
+  var permmgr_url = !goPrefBar.InSM() ?
     "chrome://browser/content/preferences/permissions.xul" :
     "chrome://communicator/content/permissions/permissionsManager.xul";
   window.openDialog(permmgr_url,
