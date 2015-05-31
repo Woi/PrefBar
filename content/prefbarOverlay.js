@@ -572,12 +572,8 @@ function CallInitFunctions(aParent) {
     else if (btn.type == "extcheck" ||
              btn.type == "extlist" ||
              btn.type == "button") {
-      if (btn.initfunction) {
-        try {
-          var lf = new Error();
-          eval(btn.initfunction);
-        } catch(e) {LogError(e, lf, id, 'initfunction');}
-      }
+      if (btn.initfunction)
+        ExecuteButtonCode(btn.initfunction, id, "initfunction", {});
     }
   }
 }
@@ -720,7 +716,7 @@ function TogglePrefBar() {
   window.content.focus();
 }
 
-function OpenPrefs() {
+function prefbarOpenPrefs() {
   var wm = goPrefBar.WindowMediator;
 
   var editWin = wm.getMostRecentWindow("prefbar:btneditor");
@@ -754,37 +750,45 @@ function IsOnPalette(aNodeID) {
   return false;
 }
 
-function LogError(e, lf, id, fname) {
-  // Nothing to display for us. Let the internal error management do the job
-  if (!e.message) {
-    throw(e);
-    return;
+// Executes code, provided by the button, in context of a sandbox on top of
+// the browser window. This is *not* meant to reduce privileges in any way as
+// the code inside PrefBar buttons *has to* run with chrome privileges!
+function ExecuteButtonCode(aCode, aId, aFname, aContext) {
+  var properties = {sandboxPrototype: aContext};
+  var sandbox = new Components.utils.Sandbox(window, properties);
+
+  // Some basic environment definition
+  sandbox.window = window;
+  sandbox.document = document;
+  sandbox.Components = Components;
+  sandbox.goPrefBar = goPrefBar;
+
+  // Pass all the "prefbar*" functions into the calling environment
+  for (var fname in window.PrefBarNS) {
+    if (fname.match(/^prefbar/))
+      sandbox[fname] = window.PrefBarNS[fname];
   }
 
-  var olnum = e.lineNumber;
-  // SeaMonkey has "fileName", Firefox has "filename"
-  var osrc = e.fileName ? e.fileName : e.filename;
-  if (osrc && osrc.match(/(prefbarOverlay|buttonhandling)\.js/)) {
-    olnum = e.lineNumber - lf.lineNumber;
-    osrc = "prefbar://" + id.substr(15) + "/" + fname;
-  }
-  var omsg = "PrefBar error: " + e.message;
+  // Execute button code
+  var result = Components.utils.evalInSandbox(aCode, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/" + aFname);
 
-  var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-    .getService(Components.interfaces.nsIConsoleService);
-  var scriptError = Components.classes["@mozilla.org/scripterror;1"]
-    .createInstance(Components.interfaces.nsIScriptError);
-  scriptError.init(omsg, osrc, null, olnum, null, 2, null);
-  consoleService.logMessage(scriptError);
+  // We want changed variables back in our context!
+  for (var varname in aContext) {
+    if (typeof sandbox[varname] != "function")
+      aContext[varname] = sandbox[varname];
+  }
+
+  return result;
 }
 
-function DoCallFrameScript(aButton, aCaller, aArgument, aCallback) {
+function DoCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
   if (!aButton.framescript) return false;
   var browserMM = gBrowser.selectedBrowser.messageManager;
 
   try {
     browserMM.sendAsyncMessage("prefbar:call-button-framescript", {
       code: aButton.framescript,
+      id: aId,
       caller: aCaller,
       argument: aArgument
     },

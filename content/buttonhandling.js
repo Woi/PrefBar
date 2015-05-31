@@ -140,26 +140,24 @@ var ButtonHandling = {
     },
     set: function(button, event) {
       var data = gMainDS[button.id];
-      var CallFrameScript = function(aArgument, aCallback) {
-        return DoCallFrameScript(data, "onclick", aArgument, aCallback);
-      }
-
-      try {
-        var lf = new Error();
-        eval(data.onclick);
-      } catch(e) { LogError(e, lf, button.id, "onclick"); }
+      var context = {
+        button: button,
+        event: event,
+        CallFrameScript: function(aArgument, aCallback) {
+          return DoCallFrameScript(data, button.id, "onclick", aArgument, aCallback);
+        }
+      };
+      ExecuteButtonCode(data.onclick, button.id, "onclick", context);
     },
     hotkey: function(aID, aData) {
-      var event = {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false};
-      var button; // Intentionally left undefined
-      var CallFrameScript = function(aArgument, aCallback) {
-        return DoCallFrameScript(aData, "onclick", aArgument, aCallback);
-      }
-
-      try {
-        var lf = new Error();
-        eval(aData.onclick);
-      } catch(e) { LogError(e, lf, aID, "onclick"); }
+      var context = {
+        button: undefined, // Intentionally left undefined
+        event: {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false},
+        CallFrameScript: function(aArgument, aCallback) {
+          return DoCallFrameScript(aData, aID, "onclick", aArgument, aCallback);
+        }
+      };
+      ExecuteButtonCode(aData.onclick, aID, "onclick", context);
     }
   },
 
@@ -220,41 +218,35 @@ var ButtonHandling = {
     },
     set: function(button) {
       var data = gMainDS[button.id];
-      var value = (button.getAttribute("checked") == "true");
-
-      try {
-        var lf = new Error();
-        value = eval(data.topref);
-      } catch(e) { LogError(e, lf, button.id, "topref"); }
+      var context = {
+        value: (button.getAttribute("checked") == "true")
+      };
+      var value = ExecuteButtonCode(data.topref, button.id, "topref", context);
 
       goPrefBar.SetPref(data.prefstring, value);
     },
     update: function(button, data) {
-      // Value is magic variable referenced in frompref
-      var value = goPrefBar.GetPref(data.prefstring);
+      var context = {
+        value: goPrefBar.GetPref(data.prefstring)
+      };
 
-      var checked;
-      try {
-        var lf = new Error();
-        checked = eval(data.frompref);
-      } catch(e) { LogError(e, lf, button.id, "frompref"); }
+      var checked = ExecuteButtonCode(data.frompref, button.id, "frompref", context);
 
       button.setAttribute("checked", checked);
 
       button.setAttribute("prefbar-visualize-unchecked", goPrefBar.GetPref("extensions.prefbar.visualize_unchecked", false));
     },
     hotkey: function(aID, aData) {
-      var value = goPrefBar.GetPref(aData.prefstring);
-      var checked;
-      try {
-        var lf = new Error();
-        checked = eval(aData.frompref);
-      } catch(e) { LogError(e, lf, aID, "frompref"); }
-      value = !checked;
-      try {
-        var lf = new Error();
-        value = eval(aData.topref);
-      } catch(e) { LogError(e, lf, aID, "topref"); }
+      var context = {
+        value: goPrefBar.GetPref(aData.prefstring)
+      }
+
+      var checked = ExecuteButtonCode(aData.frompref, aID, "frompref", context);
+
+      context.value = !checked;
+
+      var value = ExecuteButtonCode(aData.topref, aID, "topref", context);
+
       goPrefBar.SetPref(aData.prefstring, value);
 
       var msg;
@@ -277,53 +269,52 @@ var ButtonHandling = {
     },
     set: function(button, event) {
       var data = gMainDS[button.id];
-      var value = (button.getAttribute("checked") == "true");
-      var CallFrameScript = function(aArgument, aCallback) {
-        return DoCallFrameScript(data, "setfunction", aArgument, aCallback);
-      }
-
-      try {
-        var lf = new Error();
-        eval(data.setfunction);
-      } catch(e) { LogError(e, lf, button.id, "setfuntion"); }
+      var context = {
+        button: button,
+        event: event,
+        value: (button.getAttribute("checked") == "true"),
+        CallFrameScript: function(aArgument, aCallback) {
+          return DoCallFrameScript(data, button.id, "setfunction", aArgument, aCallback);
+        }
+      };
+      ExecuteButtonCode(data.setfunction, button.id, "setfunction", context);
+      window.alert("blah");
     },
     update: function(button, aData) {
       var SetValue = function(aValue) {
         button.setAttribute("checked", aValue);
       }
-      var CallFrameScript = function(aArgument, aCallback) {
-        return DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
-      }
 
-      var value;
-      try {
-        var lf = new Error();
-        eval(aData.getfunction);
-      } catch(e) { LogError(e, lf, button.id, "getfuntion"); }
+      var context = {
+        button: button,
+        value: undefined,
+        SetValue: SetValue,
+        CallFrameScript: function(aArgument, aCallback) {
+          return DoCallFrameScript(aData, button.id, "getfunction", aArgument, aCallback);
+        }
+      };
 
-      if (value !== undefined)
-        SetValue(value);
+      ExecuteButtonCode(aData.getfunction, button.id, "getfuntion", context);
+
+      if (context.value !== undefined)
+        SetValue(context.value);
 
       button.setAttribute("prefbar-visualize-unchecked", goPrefBar.GetPref("extensions.prefbar.visualize_unchecked", false));
     },
     hotkey: function(aID, aData) {
-      var event = {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false};
-      var button; // Intentionally left undefined
-
       var SetValue = function(aValue) {
-        var value = !aValue;
-
-        var CallFrameScript = function(aArgument, aCallback) {
-          return DoCallFrameScript(aData, "setfunction", aArgument, aCallback);
-        }
-
-        try {
-          var lf = new Error();
-          eval(aData.setfunction);
-        } catch(e) { LogError(e, lf, aID, "setfuntion"); }
+        var context = {
+          button: undefined, // Intentionally left undefined
+          event: {altKey:false, ctrlKey:false, metaKey:false, shiftKey:false},
+          value: !aValue,
+          CallFrameScript: function(aArgument, aCallback) {
+            return DoCallFrameScript(aData, aID, "setfunction", aArgument, aCallback);
+          }
+        };
+        ExecuteButtonCode(aData.setfunction, aID, "setfunction", context);
 
         var msg;
-        if (value)
+        if (context.value)
           msg = goPrefBar.GetString("prefbarOverlay.properties", "enabled");
         else
           msg = goPrefBar.GetString("prefbarOverlay.properties", "disabled");
@@ -331,18 +322,19 @@ var ButtonHandling = {
 
         ButtonHandling.update();
       }
-      var CallFrameScript = function(aArgument, aCallback) {
-        return DoCallFrameScript(aData, "getfunction", aArgument, aCallback);
-      }
 
-      var value;
-      try {
-        var lf = new Error();
-        eval(aData.getfunction);
-      } catch(e) { LogError(e, lf, aID, "getfuntion"); }
+      var context = {
+        button: undefined, // Intentionally left undefined
+        value: undefined,
+        SetValue: SetValue,
+        CallFrameScript: function(aArgument, aCallback) {
+          return DoCallFrameScript(aData, aID, "getfunction", aArgument, aCallback);
+        }
+      };
+      ExecuteButtonCode(aData.getfunction, aID, "getfunction", context);
 
-      if (value !== undefined)
-        SetValue(value);
+      if (context.value !== undefined)
+        SetValue(context.value);
     }
   },
 
@@ -461,15 +453,12 @@ var ButtonHandling = {
     },
     set: function(menupopup, event) {
       var data = gMainDS[menupopup.parentNode.id];
-
       var menuitem = event.target;
-      var func = data.setfunction;
-      var value = menuitem.getAttribute("value");
 
-      try {
-        var lf = new Error();
-        eval(func);
-      } catch(e) { LogError(e, lf, menupopup.id, "setfuntion"); }
+      var context = {
+        value: menuitem.getAttribute("value")
+      };
+      ExecuteButtonCode(data.setfunction, menupopup.id, "setfunction", context);
 
       // HACK: Force panel close on select (Bug 964944)
       AustralisHandler.hidePanelForNode(menupopup);
@@ -480,30 +469,26 @@ var ButtonHandling = {
 
       var menu = (button.tagName == "menu");
       var menupopup = button.menupopup;
-      var getfunction = data.getfunction;
 
-      // The variables that may be modified by the getfunction
-      /* value to select in list */
-      var value = "";
-      /* Here we have the array of all items defined via GUI. The array has
+      var context = {
+        button: button,
+        value: "",
+        /* Here we have the array of all items defined via GUI. The array has
          two dimensions. First is the index and second is label(0) and value(1)
          feel free to edit,read,parse special values or dump new items in here
          from wherever you read them */
-      var items = [];
+        items: [],
+        defaultset: false
+      };
+
       for (var index = 0; index < data.items.length; index++) {
         var srcarray = data.items[index];
-        items.push(srcarray.slice());
+        context.items.push(srcarray.slice());
       }
 
-      var defaultset = false;
+      ExecuteButtonCode(data.getfunction, menupopup.id, "getfunction", context);
 
-      // Call the getfunction
-      try {
-        var lf = new Error();
-        eval(getfunction);
-      } catch(e) { LogError(e, lf, menupopup.id, "getfuntion"); }
-
-      ButtonHandling.menulist._gen_menupopup(menupopup, menu, items, defaultset, value);
+      ButtonHandling.menulist._gen_menupopup(menupopup, menu, context.items, context.defaultset, context.value);
     }
   },
 

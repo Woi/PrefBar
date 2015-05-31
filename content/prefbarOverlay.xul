@@ -98,7 +98,7 @@
       <menuseparator/>
       <menuitem id="prefbar-customize"
                 label="&prefbar-help-customize;"
-                oncommand="PrefBarNS.OpenPrefs();"/>
+                oncommand="PrefBarNS.prefbarOpenPrefs();"/>
     </menupopup>
   </popupset>
 

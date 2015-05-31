@@ -40,15 +40,21 @@
 // The script is loaded *once* into the "content processes" and acts as a
 // bridge between PrefBar button code and website content.
 
-function handleMessageFromChrome(aMessage) {
-  var argument = aMessage.data.argument;
-  var caller = aMessage.data.caller;
-  var reply = false;
+var context = this;
 
-  eval(aMessage.data.code);
+function handleMessageFromChrome(aMessage) {
+  var principal = Components.classes["@mozilla.org/systemprincipal;1"]
+    .createInstance(Components.interfaces.nsIPrincipal);
+  var sandbox = new Components.utils.Sandbox(principal, {sandboxPrototype: context});
+
+  sandbox.argument = aMessage.data.argument;
+  sandbox.caller = aMessage.data.caller;
+  sandbox.reply = false;
+
+  Components.utils.evalInSandbox(aMessage.data.code, sandbox, "1.8", "prefbar://" + aMessage.data.id.substr(15) + "/framescript");
 
   if (aMessage.objects.callback)
-    aMessage.objects.callback(reply);
+    aMessage.objects.callback(sandbox.reply);
 }
 
 addMessageListener("prefbar:call-button-framescript", handleMessageFromChrome);

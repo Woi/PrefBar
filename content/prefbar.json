@@ -58,7 +58,7 @@
   "prefbar:button:savepage":{
     "label":"Save Page",
     "type":"button",
-    "onclick":"saveDocument(window.content.document);"
+    "onclick":"if (window.content)\n  window.saveDocument(window.content.document);\nelse\n  window.saveDocument(window.gBrowser.selectedBrowser.contentDocumentAsCPOW);"
   },
   "prefbar:button:separator8":{
     "type":"separator"
@@ -114,7 +114,7 @@
   "prefbar:button:customize":{
     "label":"Customize",
     "type":"button",
-    "onclick":"OpenPrefs();"
+    "onclick":"prefbarOpenPrefs();"
   },
   "prefbar:menu:disabled":{
     "items":["prefbar:button:back",
