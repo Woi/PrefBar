@@ -42,7 +42,7 @@
 <!ENTITY customizing.initfunction.content "Init-function は JavaScript を入力して使用します。ここで入力されたコードはボタンの初期化時に実行されます。ここでいうボタンの初期化時にはブラウザの起動時だけでなく PrefBar のボタンデータベースへの変更時も含まれます。ですからここに入力されたコードはセッション中に1回だけ実行されるものではない事に気をつけるべきです。">
 
 <!ENTITY customizing.framescript.title "Framescript">
-<!ENTITY customizing.framescript.content "The Framescript is, so far, only needed in very few situations and will be documented more in detail as soon as there is more need for it. In short this is the first step to make PrefBar compatible to Mozilla's attempt to run the content in tabs in separate processes. The &quot;Framescript&quot; is meant to run in this &quot;content-process&quot;. There is only one Framescript, so you have to call it using &quot;CallFrameScript&quot; from the other event-functions. The name of the function, who called, is passed to the &quot;Framescript&quot; via the <b>caller</b> variable. The first argument to the &quot;CallFrameScript&quot; function is forwared to the Framescript via a variable named <b>argument</b>. You may use an array or object to pass more than one value. The second argument to &quot;CallFrameScript&quot; may be a callback function which is called as soon as your Framescript is finished. If you write something to the variable <b>reply</b> in your Framescript, then this value is passed to your callback. To make asynchronous stuff like this work in Get-functions, a function called &quot;SetValue&quot; is available, there. If you don't need to modify anything in the value, you may pass &quot;SetValue&quot; directly as second argument to &quot;CallFrameScript&quot;.">
+<!ENTITY customizing.framescript.content "Framescript が必要とされる状況は限りなく少ないでしょう。そのためこの機能に関する情報はこの文章だけです。簡単に説明すると Framescript は分離プロセス上のタブで PrefBar を使用するためのものです。&quot;Framescript&quot; は &quot;content - process&quot; で動作します。Framescript だけを使用している場合 event - functions で &quot;CallFrameScript&quot; を使用して呼び出すことができます。関数は変数を通して &quot;Framescript&quot; に渡されます。&quot;CallFrameScript&quot; 関数の最初の引数は変数として Framescript に送られます。複数以上の値を扱うために配列やオブジェクトを使用したいと思うかもしれません。&quot;CallFrameScript&quot; 関数の2番目の引数には Framescript が実行後に呼び出されるコールバック関数を使用します。あなたが Framescript に戻り値を指定するなら、その変数はコールバック関数に送られます。非同期処理を行いたい時は &quot;SetValue&quot; を使用します。戻り値を必要としないのであれば &quot;CallFrameScript&quot; の2番目の引数に直接 &quot;SetValue&quot; を指定することもできます。">
 
 <!ENTITY customizing.label-value.title "表示名 &amp; 値">
 <!ENTITY customizing.label-value.content "メニューリスト形式のボタンでのみ使用出来ます。Prefstring で指定したブラウザへの設定の値と表示名を入力します。値に &quot;!RESET!&quot; と入れるならその設定はリセット (about:config で [リセット] を選択するのと同じ効果) が得られます。また表示名が入力されていない場合、その項目は無視され表示されません。">
@@ -67,7 +67,7 @@
 
 <!ENTITY editresize.title "画面の大きさ">
 <!ENTITY editresize.howto "画面の解像度を追加したい場合は次の形式で入力してください:">
-<!ENTITY editresize.example "<i>$WIDTH</i><b>x</b><i>$HEIGHT</i>">>
+<!ENTITY editresize.example "<i>$WIDTH</i><b>x</b><i>$HEIGHT</i>">
 <!ENTITY editresize.onevalueonly "ウィンドウの横幅と高さのどちらか片方だけを指定したい場合は、片方の値だけを入力する事で設定できます。例えば横幅だけを設定したい時は &quot;1024x&quot; と入力してください。">
 
 <!ENTITY edituseragent.title "ユーザーエージェント">
