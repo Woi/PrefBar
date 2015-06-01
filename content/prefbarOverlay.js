@@ -754,14 +754,12 @@ function IsOnPalette(aNodeID) {
 // the browser window. This is *not* meant to reduce privileges in any way as
 // the code inside PrefBar buttons *has to* run with chrome privileges!
 function ExecuteButtonCode(aCode, aId, aFname, aContext) {
-  var properties = {sandboxPrototype: aContext};
-  var sandbox = new Components.utils.Sandbox(window, properties);
+  var sandbox = new Components.utils.Sandbox(window, {sandboxPrototype:window});
 
-  // Some basic environment definition
-  sandbox.window = window;
-  sandbox.document = document;
-  sandbox.Components = Components;
-  sandbox.goPrefBar = goPrefBar;
+  // Pass all context variables into the calling environment
+  for (var varname in aContext) {
+    sandbox[varname] = aContext[varname];
+  }
 
   // Pass all the "prefbar*" functions into the calling environment
   for (var fname in window.PrefBarNS) {
