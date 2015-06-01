@@ -278,7 +278,6 @@ var ButtonHandling = {
         }
       };
       ExecuteButtonCode(data.setfunction, button.id, "setfunction", context);
-      window.alert("blah");
     },
     update: function(button, aData) {
       var SetValue = function(aValue) {

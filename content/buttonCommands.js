@@ -284,7 +284,12 @@ function prefbarZoomEnlarge() {
 //
 
 function prefbarKillFlash() {
-  var frames = prefbarGetFrames(window._content.window);
+  var frames;
+  if (window.content)
+    frames = prefbarGetFrames(window.content.window);
+  else
+    frames = prefbarGetFrames(window.gBrowser.selectedBrowser.contentDocumentAsCPOW.defaultView);
+
   for (var frameindex = 0; frameindex < frames.length; frameindex++) {
     var page = frames[frameindex].document;
 

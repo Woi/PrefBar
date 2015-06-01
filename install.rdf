@@ -5,6 +5,7 @@
 
     <em:id>{8A6C82A1-F6C9-481a-AAE7-C96444C9A754}</em:id>
     <em:type>2</em:type>
+    <em:multiprocessCompatible>true</em:multiprocessCompatible>
     <em:unpack>true</em:unpack>
     <em:name>PrefBar</em:name>
     <em:version>6.6.0</em:version>
