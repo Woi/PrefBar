@@ -705,7 +705,7 @@ function GoLink(url, event) {
   }
 }
 
-function TogglePrefBar() {
+function prefbarToggleToolbar() {
   if (!goPrefBar.InSM()) {
     var prefbar = document.getElementById("prefbar");
     prefbar.collapsed = !prefbar.collapsed;

@@ -65,14 +65,14 @@
   <!-- Firefox: -->
   <commandset id="mainCommandSet">
     <command id="cmd_prefbar"
-             oncommand="PrefBarNS.TogglePrefBar();"/>
+             oncommand="PrefBarNS.prefbarToggleToolbar();"/>
   </commandset>
 
 
   <!-- SeaMonkey: -->
   <commandset id="commands">
     <command id="cmd_prefbar"
-             oncommand="PrefBarNS.TogglePrefBar()"/>
+             oncommand="PrefBarNS.prefbarToggleToolbar();"/>
   </commandset>
 
   <toolbox id="navigator-toolbox">

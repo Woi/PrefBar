@@ -411,7 +411,7 @@
   "prefbar:button:hidetoolbar":{
     "label":"Hide Toolbar",
     "type":"button",
-    "onclick":"setTimeout(TogglePrefBar);"
+    "onclick":"setTimeout(prefbarToggleToolbar);"
   },
   "prefbar:button:proxylist":{
     "items":[["None",
