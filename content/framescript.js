@@ -58,3 +58,21 @@ function handleMessageFromChrome(aMessage) {
 }
 
 addMessageListener("prefbar:call-button-framescript", handleMessageFromChrome);
+
+addEventListener("click", function(event) {
+  // Don't trust synthetic events
+  if (!event.isTrusted) return true;
+
+  var node = event.originalTarget;
+  if (!node.getAttribute) return true;
+  if (!node.hasAttribute("href")) return true;
+  var tagname = node.nodeName.toLowerCase();
+  var href = node.getAttribute("href");
+  if (tagname == "a" && href.indexOf("prefbar://") == 0 && event.button < 2) {
+    sendAsyncMessage("prefbar:trigger-url-import", {href: href}, {});
+    event.stopPropagation();
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}, false);

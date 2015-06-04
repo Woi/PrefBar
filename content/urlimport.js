@@ -210,7 +210,9 @@ function parseurl(aURL) {
     Components.interfaces.nsIScriptSecurityManager;
   var secMan = Components.classes["@mozilla.org/scriptsecuritymanager;1"]
     .getService(nsIScriptSecurityManager);
-  var principal = window.opener.content.document.nodePrincipal;
+  var principal = window.opener.content ?
+    window.opener.content.document.nodePrincipal :
+    window.opener.gBrowser.nodePrincipal;
   var flags = nsIScriptSecurityManager.STANDARD;
   try {
     secMan.checkLoadURIWithPrincipal(principal, url, flags);

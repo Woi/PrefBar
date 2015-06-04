@@ -100,9 +100,12 @@ function Init() {
   ImportWhitelistPrefs();
 
   // Register our "frame script"
-  var globalMM = Components.classes["@mozilla.org/globalmessagemanager;1"]
-    .getService(Components.interfaces.nsIMessageListenerManager);
-  globalMM.loadFrameScript("chrome://prefbar/content/framescript.js", true);
+  if (IsE10sCapable()) {
+    var globalMM = Components.classes["@mozilla.org/globalmessagemanager;1"]
+      .getService(Components.interfaces.nsIMessageListenerManager);
+    globalMM.loadFrameScript("chrome://prefbar/content/framescript.js", true);
+    globalMM.addMessageListener("prefbar:trigger-url-import", TriggerUrlImport);
+  }
 }
 
 var ProfChangeObserver = {
@@ -209,6 +212,10 @@ function InGecko(aLowerVersion, aUpperVersion) {
     return false;
 
   return true;
+}
+// We expect the message manager API to be compatible for us since FF 38
+function IsE10sCapable() {
+  return InFF("38.0");
 }
 
 function ChromeExists(chromeurl) {
@@ -502,4 +509,17 @@ function GoButtonEditor(aWindow, aParam, aParam2) {
     editWin.focus();
   else
     aWindow.openDialog("chrome://prefbar/content/buttoneditor/editWin.xul", "editItemDialog", "chrome,titlebar,dialog,resizable,minimizable", aParam, aParam2);
+}
+
+function TriggerUrlImport(aMessage) {
+  if (!GetPref("extensions.prefbar.website_import")) return;
+
+  var win = WindowMediator.getMostRecentWindow("navigator:browser");
+  if (!win) return;
+
+  var href = aMessage.data ? aMessage.data.href : aMessage;
+  win.openDialog("chrome://prefbar/content/urlimport.xul",
+                 "prefbarURLImport",
+                 "chrome,centerscreen,modal,titlebar",
+                 href);
 }

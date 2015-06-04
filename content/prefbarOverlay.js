@@ -65,7 +65,8 @@ function StartPrefBar(event) {
   window.addEventListener("resize", OnResize, false);
 
   var appcontent = window.document.getElementById("appcontent");
-  appcontent.addEventListener("click", OnLinkClicked, false);
+  if (!goPrefBar.IsE10sCapable())
+    appcontent.addEventListener("click", OnLinkClicked, false);
   appcontent.addEventListener("DOMContentLoaded", OnPageLoaded, false);
   appcontent.addEventListener("select", OnTabChanged, false);
 
@@ -385,20 +386,13 @@ function OnLinkClicked(event) {
   // Don't trust synthetic events
   if (!event.isTrusted) return true;
 
-  if (!goPrefBar.GetPref("extensions.prefbar.website_import")) return true;
-
   var node = event.originalTarget;
   if (!node.getAttribute) return true;
   if (!node.hasAttribute("href")) return true;
   var tagname = node.nodeName.toLowerCase();
   var href = node.getAttribute("href");
   if (tagname == "a" && href.indexOf("prefbar://") == 0 && event.button < 2) {
-    goPrefBar.dump("PrefBar: Link click " + href);
-    window.openDialog("chrome://prefbar/content/urlimport.xul",
-                      "prefbarURLImport",
-                      "chrome,centerscreen,modal,titlebar",
-                      href);
-
+    goPrefBar.TriggerUrlImport(href);
     event.stopPropagation();
     event.preventDefault();
     return false;
@@ -768,7 +762,10 @@ function ExecuteButtonCode(aCode, aId, aFname, aContext) {
   }
 
   // Execute button code
-  var result = Components.utils.evalInSandbox(aCode, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/" + aFname);
+  var result;
+  try {
+    result = Components.utils.evalInSandbox(aCode, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/" + aFname);
+  } catch(e) {}
 
   // We want changed variables back in our context!
   for (var varname in aContext) {
@@ -781,6 +778,10 @@ function ExecuteButtonCode(aCode, aId, aFname, aContext) {
 
 function DoCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
   if (!aButton.framescript) return false;
+
+  if (!goPrefBar.IsE10sCapable())
+    return LegacyCallFrameScript.apply(this, arguments);
+
   var browserMM = gBrowser.selectedBrowser.messageManager;
 
   try {
@@ -798,4 +799,23 @@ function DoCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
     return false;
   }
   return true;
+}
+// This is for legacy platforms where the message manager API may miss some
+// features where we depend on.
+function LegacyCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
+  var sandbox = new Components.utils.Sandbox(window);
+
+  sandbox.caller = aCaller;
+  sandbox.argument = aArgument;
+  sandbox.reply = false;
+  sandbox.docShell = getBrowser().docShell.QueryInterface(Components.interfaces.nsIDocShell);
+  sandbox.content = window.content;
+  sandbox.Components = Components;
+
+  try {
+    Components.utils.evalInSandbox(aButton.framescript, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/framescript");
+  } catch(e) {}
+
+  if (aCallback)
+    aCallback(sandbox.reply);
 }
