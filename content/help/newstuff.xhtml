@@ -75,6 +75,7 @@
       </p>
 
       <p>
+        <a href="#v7.0">Changelog 7.0</a><br/>
         <a href="#v6.6">Changelog 6.6</a><br/>
         <a href="#v6.5">Changelog 6.5</a><br/>
         <a href="#v6.4">Changelog 6.4</a><br/>
@@ -118,6 +119,12 @@
       </p>
 
       <hr/>
+      <a href="#v7.0">Changelog 7.0</a><br/>
+      <ul>
+        <li>Replaced "eval" with "evalInSandbox" to execute code inside PrefBar buttons. This change was required to get code review from the addons.mozilla.org team. I've bumped the version to 7.0 as this is a major change which may break some buttons. Please report any errors, you find. (Manuel Reimer)</li>
+        <li>Improved support for legacy platforms which don't have the required message manager features, which are only available on browsers that are e10s capable. (Manuel Reimer)</li>
+        <li>Some more e10s fixes. Button import now works again. Please report any problems you still find with e10s. (Manuel Reimer)</li>
+      </ul>
 
       <h2 id="v6.6">Changelog 6.6</h2>
       <ul>
