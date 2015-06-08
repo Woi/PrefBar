@@ -43,25 +43,30 @@ var goPrefBar = {
   Include: function(asURL, aoContext) {
     var oLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Components.interfaces.mozIJSSubScriptLoader);
-    var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-      .getService(Components.interfaces.nsIConsoleService);
-    var scriptError = Components.classes["@mozilla.org/scripterror;1"]
-      .createInstance(Components.interfaces.nsIScriptError);
     try {
       oLoader.loadSubScript(asURL, aoContext);
       return true;
     }
     catch(e) {
-      scriptError.init(e.message,
-                       e.fileName,
-                       null,
-                       e.lineNumber,
-                       null,
-                       2,
-                       null);
-      consoleService.logMessage(scriptError);
+      this.ReportException(e);
       return false;
     }
+  },
+
+  ReportException: function(aException) {
+    var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+      .getService(Components.interfaces.nsIConsoleService);
+    var scriptError = Components.classes["@mozilla.org/scripterror;1"]
+      .createInstance(Components.interfaces.nsIScriptError);
+
+    scriptError.init(aException.toString(),
+                     aException.fileName ? aException.fileName : aException.filename,
+                     null,
+                     aException.lineNumber,
+                     aException.columnNumber,
+                     2,
+                     "chrome javascript");
+    consoleService.logMessage(scriptError);
   }
 };
 

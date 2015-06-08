@@ -765,7 +765,9 @@ function ExecuteButtonCode(aCode, aId, aFname, aContext) {
   var result;
   try {
     result = Components.utils.evalInSandbox(aCode, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/" + aFname);
-  } catch(e) {}
+  } catch(e) {
+    goPrefBar.ReportException(e);
+  }
 
   // We want changed variables back in our context!
   for (var varname in aContext) {
@@ -814,8 +816,12 @@ function LegacyCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
 
   try {
     Components.utils.evalInSandbox(aButton.framescript, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/framescript");
-  } catch(e) {}
+  } catch(e) {
+    goPrefBar.ReportException(e);
+    return false;
+  }
 
   if (aCallback)
     aCallback(sandbox.reply);
+  return true;
 }
