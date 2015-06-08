@@ -293,7 +293,7 @@ var ButtonHandling = {
         }
       };
 
-      ExecuteButtonCode(aData.getfunction, button.id, "getfuntion", context);
+      ExecuteButtonCode(aData.getfunction, button.id, "getfunction", context);
 
       if (context.value !== undefined)
         SetValue(context.value);
