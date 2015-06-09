@@ -818,7 +818,6 @@ function LegacyCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
     Components.utils.evalInSandbox(aButton.framescript, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/framescript");
   } catch(e) {
     goPrefBar.ReportException(e);
-    return false;
   }
 
   if (aCallback)
