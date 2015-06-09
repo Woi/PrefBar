@@ -816,11 +816,12 @@ function LegacyCallFrameScript(aButton, aId, aCaller, aArgument, aCallback) {
 
   try {
     Components.utils.evalInSandbox(aButton.framescript, sandbox, "1.8", "prefbar://" + aId.substr(15) + "/framescript");
+
+    if (aCallback)
+      aCallback(sandbox.reply);
   } catch(e) {
     goPrefBar.ReportException(e);
   }
 
-  if (aCallback)
-    aCallback(sandbox.reply);
   return true;
 }
