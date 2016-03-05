@@ -85,6 +85,9 @@
       ["Lynx",
         "Lynx/2.8.3rel.1 libwww-FM/2.14FM"
       ]
+      ["Googlebot"
+        "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+      ]
     ],
     "label":"User Agent",
     "type":"extlist",
