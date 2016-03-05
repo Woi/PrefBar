@@ -88,6 +88,12 @@
       ["Googlebot"
         "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
       ]
+      ["FF 44.0 Phone"
+        "Mozilla/5.0 (Android 4.4; Mobile; rv:44.0) Gecko/44.0 Firefox/44.0"
+      ]
+      ["FF 44.0 Tablet"
+        "Mozilla/5.0 (Android 4.4; Tablet; rv:44.0) Gecko/44.0 Firefox/44.0"
+      ]
     ],
     "label":"User Agent",
     "type":"extlist",
